@@ -49,7 +49,7 @@ public class MyArrayList {
     private void checkIndex(int index){
         if (index < 0 || index >= size){
             throw new ArrayIndexOutOfBoundsException("index not correct");
-        }
+        } //
     }
     private void checkID(){
         return 0
