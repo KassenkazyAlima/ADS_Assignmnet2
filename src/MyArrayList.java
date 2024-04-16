@@ -51,6 +51,9 @@ public class MyArrayList {
             throw new ArrayIndexOutOfBoundsException("index not correct");
         }
     }
+    private void checkID(){
+        return 0
+    }
 }
 
 // created new array, and we also have a old array
