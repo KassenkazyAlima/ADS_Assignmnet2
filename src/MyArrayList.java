@@ -1,59 +1,46 @@
-import java.util.ArrayList;
 
-public class MyArrayList {
-    private int[] arr;
-    private int size;
+public final class MyArrayList<T> implements iterable<T>{
+    private Object[] arr; // arr
+    private int size = 0; // size
+    private int capacity = 5; // capacity
 
-    public void ArrayList(){
-        arr = new int[5];
-        size = 0;
+    public MyArrayList(){
+        arr = new Object[capacity];
+        /* declaration, integer with capacity of 5.
+        In the main class, if we want to create instance for MyArraylist,
+        we need to call the instructor.
+         */
     }
-    public void addElement(int element){
-        if(size > arr.length){
+
+    public T get(int index){
+        return (T) arr[index]; //to get (print) the value by index. In order to access the data
+    }
+
+    public void add(T newItem){ //adding element
+        if( size == capacity){ // checking if the size is equal to capacity.
             increaseBuffer();
         }
-        arr[size++] = element;
+        arr[size++] = newItem; //if not, then just insert the element to our array
+        // arr[0] = 56
     }
 
-    public void addElement(int element, int index){
-        checkIndex(index);
-        if ( size >= arr.length){
-            increaseBuffer();
+    public void increaseBuffer(){
+        capacity = (int) (1.5 * capacity); // formula designed by programmer. increase
+        Object[] arr2 = new Object[capacity]; // new capacity
+        for(int i = 0; i<size; i++){
+            arr2[i] = arr[i];
         }
-        arr[index] = element;
+        arr = arr2;
     }
-    private void increaseBuffer(){
-        int[] newArr = new int[arr.length *2];
-        for (int i =0; i<arr.length;i++){
-            newArr[i] = arr[i];
-
-        }
-        arr = newArr;
-    }
-
-    //to get the element
-    public int getElement(int index){
-        checkIndex(index);
-        return arr[index];
-    }
-    public int getsize(){
+    public int getSize() {
         return size;
     }
+    public iterator<T> iterator(){
+        return new MyIterator();
+    }
+    public class MyIterator implements iterable<T>{
+        int cursr
+    }
 
-    public void removeElement(int index){
-        checkIndex(index);
-        for (int i = index; i<size ; i++){
-            arr[i--] = arr[i];
-        }
-    }
-    private void checkIndex(int index){
-        if (index < 0 || index >= size){
-            throw new ArrayIndexOutOfBoundsException("index not correct");
-        } //
-    }
-    private void checkID(){
-        return 0
-    }
+
 }
-
-// created new array, and we also have a old array
