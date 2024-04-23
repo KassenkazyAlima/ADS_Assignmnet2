@@ -1,7 +1,6 @@
 //Implement all methods
 //Test all methods of MyArrayList
 
-//
 public class MyArrayList<T> {
     private Object[] arr; //in order to hold the elements of the list
     private int size = 0; // size - number of elements
@@ -26,7 +25,7 @@ public class MyArrayList<T> {
         arr[size++] = newItem; //if not, then just insert the element to our array
         // arr[0] = 56
     }
-
+/
     public void increaseBuffer(){
         capacity = (int) (1.5 * capacity); // formula designed by programmer. increase
         Object[] arr2 = new Object[capacity]; // new capacity
@@ -41,6 +40,10 @@ public class MyArrayList<T> {
     public iterator<T> iterator(){
         return new MyIterator();
     }
+
+    public void addElement(int i) {
+    }
+
     public class MyIterator implements iterable<T>{
         int cursr
     }
