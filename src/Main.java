@@ -6,4 +6,4 @@ public class Main {
         // store data by using the instance
 
     }
-}
+}//

@@ -1,7 +1,7 @@
 //Implement all methods
 //Test all methods of MyArrayList
 
-
+//
 public class MyArrayList<T> {
     private Object[] arr; //in order to hold the elements of the list
     private int size = 0; // size - number of elements

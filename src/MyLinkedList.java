@@ -6,7 +6,7 @@
 public class MyLinkedList<T> implements MyList<T> {
     private MyNode head;
     private MyNode tail;
-    private int size;
+    private int size;//
 
     public MyLinkedList(){
         this.head = null;
