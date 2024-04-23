@@ -1,7 +1,10 @@
+//Implement all methods
+//Test all methods of MyArrayList
 
-public final class MyArrayList<T> implements iterable<T>{
-    private Object[] arr; // arr
-    private int size = 0; // size
+
+public class MyArrayList<T> {
+    private Object[] arr; //in order to hold the elements of the list
+    private int size = 0; // size - number of elements
     private int capacity = 5; // capacity
 
     public MyArrayList(){

@@ -1,5 +1,4 @@
 
-
 public class Main {
     public static void main(String[] args) {
         // create instance for class MyArraylist, call the constructor
