@@ -5,7 +5,7 @@ public class MyStack<T extends Comparable<T>> {
 
 
     public void push(T element) {
-        list.addLast(element); //adding elements to the end
+        list.addLast(element); //adding elements to the end..
     }
 
     public T pop() {
