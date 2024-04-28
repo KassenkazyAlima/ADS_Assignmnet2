@@ -1,13 +1,18 @@
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static sun.util.locale.LocaleUtils.isEmpty;
+
+
 public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
+
+    // Node class for the elements of the linked list
     private static class ListNode<T extends Comparable<T>> implements Comparable<ListNode<T>> {
         T data;
         ListNode<T> next;
         ListNode<T> prev;
 
+        // Constructors for ListNode class
         ListNode(T data) {
             this.data = data;
             this.next = null;
@@ -20,16 +25,19 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
             this.prev = prev;
         }
 
+        // Method to compare nodes
         @Override
         public int compareTo(ListNode<T> other) {
             return this.data.compareTo(other.data);
         }
     }
 
+    // Head and tail pointers of the linked list
     private ListNode<T> head;
     private ListNode<T> tail;
     private int size;
 
+    // Method to add an element to the end of the list
     @Override
     public void add(T item) {
         if (head == null) {
@@ -43,6 +51,7 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
         size++;
     }
 
+    // Method to set an element at a specific index
     @Override
     public void set(int index, T item) {
         if (index < 0 || index >= size) {
@@ -52,6 +61,7 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
         current.data = item;
     }
 
+    // Method to add an element at a specific index
     @Override
     public void add(int index, T item) {
         if (index < 0 || index > size) {
@@ -70,6 +80,7 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
         }
     }
 
+    // Method to add an element at the beginning of the list
     @Override
     public void addFirst(T item) {
         ListNode<T> newNode = new ListNode<>(item, head, null);
@@ -82,11 +93,13 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
         size++;
     }
 
+    // Method to add an element at the end of the list
     @Override
     public void addLast(T item) {
         add(item);
     }
 
+    // Method to get the element at a specific index
     @Override
     public T get(int index) {
         if (index < 0 || index >= size) {
@@ -96,6 +109,7 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
         return current.data;
     }
 
+    // Method to get the first element of the list
     @Override
     public T getFirst() {
         if (head == null) {
@@ -104,6 +118,7 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
         return head.data;
     }
 
+    // Method to get the last element of the list
     @Override
     public T getLast() {
         if (tail == null) {
@@ -112,6 +127,7 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
         return tail.data;
     }
 
+    // Method to remove an element at a specific index
     @Override
     public void remove(int index) {
         if (index < 0 || index >= size) {
@@ -132,22 +148,27 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
         size--;
     }
 
+    // Method to remove the first element of the list
     @Override
-    public void removeFirst() {
-        if (head == null) {
-            throw new NoSuchElementException();
+    public T removeFirst() {
+        if (isEmpty()) {
+            throw new NoSuchElementException("List is empty");
         }
-        ListNode<T> nextNode = head.next;
-        if (nextNode != null) {
-            nextNode.prev = null;
+        T element = head.data;
+        head = head.next;
+        if (head != null) {
+            head.prev = null;
         } else {
             tail = null;
         }
-        head.next = null;
-        head = nextNode;
         size--;
+        return element; // Return the removed element
     }
 
+
+
+
+    // Method to remove the last element of the list
     @Override
     public void removeLast() {
         if (tail == null) {
@@ -164,6 +185,7 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
         size--;
     }
 
+    // Method to sort the elements of the list
     @Override
     public void sort() {
         if (size <= 1) {
@@ -177,6 +199,7 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
         }
     }
 
+    // Method to find the index of a specified object
     @Override
     public int indexOf(Object object) {
         int index = 0;
@@ -201,6 +224,7 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
         return -1;
     }
 
+    // Method to find the last index of a specified object
     @Override
     public int lastIndexOf(Object object) {
         int index = size - 1;
@@ -225,6 +249,7 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
         return -1;
     }
 
+    // Method to check if a specified object exists in the list
     @Override
     public boolean exists(Object object) {
         ListNode<T> current = head;
@@ -245,51 +270,5 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
         }
         return false;
     }
-
-    @Override
-    public Object[] toArray() {
-        Object[] result = new Object[size];
-        int i = 0;
-        ListNode<T> current = head;
-        while (current != null) {
-            result[i++] = current.data;
-            current = current.next;
-        }
-        return result;
-    }
-
-    @Override
-    public void clear() {
-        ListNode<T> current = head;
-        while (current != null) {
-            ListNode<T> next = current.next;
-            current.data = null;
-            current.next = null;
-            current.prev = null;
-            current = next;
-        }
-        head = null;
-        tail = null;
-        size = 0;
-    }
-
-    @Override
-    public int size() {
-        return size;
-    }
-
-    @Override
-    public Iterator<T> iterator() {
-        return new Iterator<T>() {
-            private ListNode<T> current = head;
-
-            @Override
-            public boolean hasNext() {
-                return current != null;
-            }
-
-            @Override
-            public T next() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException();
+}
 
