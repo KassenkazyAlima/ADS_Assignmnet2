@@ -1,111 +1,92 @@
-//Implement all methods
-//Test all methods of MyArrayList
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public class MyArrayList<T>  implements MyList<T>{
-    private Object[] arr; //in order to hold the elements of the list
-    private int size = 0; // size - number of elements
-    private int capacity = 5; // capacity
+public class MyArrayList<T> implements MyList<T> {
+    private Object[] arr;
+    private int size = 0;
+    private int capacity = 10;
 
-    public MyArrayList(){
+    public MyArrayList() {
         arr = new Object[capacity];
-        /* declaration, integer with capacity of 5.
-        In the main class, if we want to create instance for MyArraylist,
-        we need to call the instructor.
-         */
     }
 
-    public MyArrayList(int initialCapacity){
-        if(initialCapacity < 0){
-            throw new IllegalArgumentException("Illegral Capacity " + initialCapacity);
+    public MyArrayList(int initialCapacity) {
+        if (initialCapacity < 0) {
+            throw new IllegalArgumentException("Illegal Capacity " + initialCapacity);
         }
         arr = new Object[initialCapacity];
     }
-    public MyArrayList(Object[] items){
-        arr = items;
-        size = items.length;
+
+    @Override
+    public T get(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
+        return (T) arr[index];
     }
 
-    public MyArrayList(MyArrayList<T> list){
-        arr = list.arr;
-        size = list.size;
-    }
     @Override
-    public T get(int index){
-        return (T) arr[index]; //to get (print) the value by index. In order to access the data
-    }
-    @Override
-    public void add(T newItem){ //adding element
-        if( size == capacity){ // checking if the size is equal to capacity.
-            increaseBuffer();
+    public void add(T item) {
+        if (size == arr.length) {
+            increaseCapacity();
         }
-        arr[size++] = newItem;
-        size++;//if not, then just insert the element to our array
-        // arr[0] = 56
+        arr[size++] = item;
     }
-    public void increaseBuffer(){
-        Object[] newArr = (T[]) new Object[arr.length *2];
-        for (int i =0; i<arr.length;i++){
-            newArr[i] = (T) arr[i];
 
-        }
+    private void increaseCapacity() {
+        int newCapacity = arr.length * 2;
+        Object[] newArr = new Object[newCapacity];
+        System.arraycopy(arr, 0, newArr, 0, size);
         arr = newArr;
     }
 
     @Override
-    public void set(int index, T item){
-        if(index < 0 || index>=size){
+    public void set(int index, T item) {
+        if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
         arr[index] = item;
     }
 
-
     @Override
     public void add(int index, T item) {
-        if(index < 0 || index > size){
+        if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException();
         }
-        if(size = arr.length) {
-            T[] newArr = (T[]) new Object[arr.length * 2];
-            System.arraycopy(arr, 0, newArr, 0, arr.length);
-            arr = newArr;
+        if (size == arr.length) {
+            increaseCapacity();
         }
         for (int i = size; i > index; i--) {
             arr[i] = arr[i - 1];
         }
         arr[index] = item;
         size++;
-
     }
 
     @Override
-    public T get(int index){
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException();
-        }
-        return arr[index];
+    public void addFirst(T item) {
+        add(0, item);
+    }
+
+    @Override
+    public void addLast(T item) {
+        add(item);
     }
 
     @Override
     public T getFirst() {
         if (size == 0) {
-            throw new IndexOutOfBoundsException();
+            throw new NoSuchElementException("List is empty");
         }
-        return arr[0];
+        return get(0);
     }
 
     @Override
     public T getLast() {
         if (size == 0) {
-            throw new IndexOutOfBoundsException();
+            throw new NoSuchElementException("List is empty");
         }
-        return arr[size - 1];
-    }
-
-    @Override
-    public int getSize() {
-        return size;
+        return get(size - 1);
     }
 
     @Override
@@ -117,42 +98,28 @@ public class MyArrayList<T>  implements MyList<T>{
             arr[i] = arr[i + 1];
         }
         size--;
-
     }
 
     @Override
     public void removeFirst() {
         if (size == 0) {
-            throw new IndexOutOfBoundsException();
+            throw new NoSuchElementException("List is empty");
         }
-
-        for (int i = 0; i < size - 1; i++) {
-            arr[i] = arr[i + 1];
-        }
-        size--;
+        remove(0);
     }
 
     @Override
     public void removeLast() {
         if (size == 0) {
-            throw new IndexOutOfBoundsException();
+            throw new NoSuchElementException("List is empty");
         }
-
-        size--;
+        remove(size - 1);
     }
 
     @Override
     public void sort() {
-        for (int i = 0; i < size - 1; i++) {
-            for (int j = i + 1; j < size; j++) {
-                if (((Comparable<T>) arr[i]).compareTo(arr[j]) > 0) {
-                    T temp = arr[i];
-                    arr[i] = arr[j];
-                    arr[j] = temp;
-                }
-            }
-        }
-
+        // Assuming T is comparable
+        java.util.Arrays.sort((T[]) arr, 0, size);
     }
 
     @Override
@@ -164,10 +131,11 @@ public class MyArrayList<T>  implements MyList<T>{
         }
         return -1;
     }
+
     @Override
     public int lastIndexOf(Object object) {
         for (int i = size - 1; i >= 0; i--) {
-            if (array[i].equals(object)) {
+            if (arr[i].equals(object)) {
                 return i;
             }
         }
@@ -186,16 +154,14 @@ public class MyArrayList<T>  implements MyList<T>{
 
     @Override
     public Object[] toArray() {
-        Object[] arr = new Object[size];
-        // Use System.arraycopy for better performance when copying elements.
-        System.arraycopy(arr, 0, arr, 0, size);
-        return arr;
+        Object[] newArr = new Object[size];
+        System.arraycopy(arr, 0, newArr, 0, size);
+        return newArr;
     }
 
     @Override
     public void clear() {
         size = 0;
-
     }
 
     @Override
@@ -203,27 +169,11 @@ public class MyArrayList<T>  implements MyList<T>{
         return size;
     }
 
-
-
-
-
-
-
     @Override
-    public void addFirst(T item) {
-        add(0,item);
-
-    }
-
-    @Override
-    public void addLast(T item) {
-        add(item);
-
-    }
-
-    public Iterator<T> iterator(){
+    public Iterator<T> iterator() {
         return new Iterator<T>() {
             private int index = 0;
+
             @Override
             public boolean hasNext() {
                 return index < size;
@@ -231,14 +181,11 @@ public class MyArrayList<T>  implements MyList<T>{
 
             @Override
             public T next() {
-                return arr[index++];
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                return get(index++);
             }
         };
     }
-
-    public void addElement(int i) {
-    }
-
-    
-
 }

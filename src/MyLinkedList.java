@@ -1,4 +1,3 @@
-package week6Laboratory2;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -23,11 +22,9 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
 
         @Override
         public int compareTo(ListNode<T> other) {
-
             return this.data.compareTo(other.data);
         }
     }
-
 
     private ListNode<T> head;
     private ListNode<T> tail;
@@ -35,12 +32,10 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
 
     @Override
     public void add(T item) {
-
         if (head == null) {
             head = new ListNode<>(item);
             tail = head;
         } else {
-
             ListNode<T> newNode = new ListNode<>(item, null, tail);
             tail.next = newNode;
             tail = newNode;
@@ -50,18 +45,10 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
 
     @Override
     public void set(int index, T item) {
-
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
-
-
-        ListNode<T> current = head;
-        for (int i = 0; i < index; i++) {
-            current = current.next;
-        }
-
-
+        ListNode<T> current = getNodeAtIndex(index);
         current.data = item;
     }
 
@@ -70,18 +57,12 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException();
         }
-
         if (index == 0) {
             addFirst(item);
         } else if (index == size) {
-
             addLast(item);
         } else {
-
-            ListNode<T> current = head;
-            for (int i = 0; i < index; i++) {
-                current = current.next;
-            }
+            ListNode<T> current = getNodeAtIndex(index);
             ListNode<T> newNode = new ListNode<>(item, current, current.prev);
             current.prev.next = newNode;
             current.prev = newNode;
@@ -92,11 +73,9 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
     @Override
     public void addFirst(T item) {
         ListNode<T> newNode = new ListNode<>(item, head, null);
-
         if (head == null) {
             tail = newNode;
         } else {
-
             head.prev = newNode;
         }
         head = newNode;
@@ -105,36 +84,20 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
 
     @Override
     public void addLast(T item) {
-
         add(item);
     }
 
     @Override
     public T get(int index) {
-
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
-
-        ListNode<T> current;
-
-        if (index < size / 2) {
-            current = head;
-            for (int i = 0; i < index; i++) {
-                current = current.next;
-            }
-        } else {
-            current = tail;
-            for (int i = size - 1; i > index; i--) {
-                current = current.prev;
-            }
-        }
+        ListNode<T> current = getNodeAtIndex(index);
         return current.data;
     }
 
     @Override
     public T getFirst() {
-
         if (head == null) {
             throw new NoSuchElementException();
         }
@@ -143,7 +106,6 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
 
     @Override
     public T getLast() {
-
         if (tail == null) {
             throw new NoSuchElementException();
         }
@@ -155,7 +117,6 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
-
         if (index == 0) {
             removeFirst();
             return;
@@ -163,18 +124,11 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
             removeLast();
             return;
         }
-
-
-        ListNode<T> current = head;
-        for (int i = 0; i < index; i++) {
-            current = current.next;
-        }
-
+        ListNode<T> current = getNodeAtIndex(index);
         current.prev.next = current.next;
         current.next.prev = current.prev;
         current.next = null;
         current.prev = null;
-
         size--;
     }
 
@@ -183,20 +137,14 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
         if (head == null) {
             throw new NoSuchElementException();
         }
-
-
         ListNode<T> nextNode = head.next;
-
         if (nextNode != null) {
             nextNode.prev = null;
         } else {
-
             tail = null;
         }
-
         head.next = null;
         head = nextNode;
-
         size--;
     }
 
@@ -205,56 +153,27 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
         if (tail == null) {
             throw new NoSuchElementException();
         }
-
-
         ListNode<T> prevNode = tail.prev;
-
         if (prevNode != null) {
-
             prevNode.next = null;
         } else {
             head = null;
         }
-
-
         tail.prev = null;
         tail = prevNode;
-
         size--;
     }
 
     @Override
     public void sort() {
-        if (head == null || head.next == null) {
+        if (size <= 1) {
             return;
         }
-
-        ListNode<T> sorted = new ListNode<>(null); // Dummy head
-
-        while (head != null) {
-            ListNode<T> current = head;
-            head = head.next;
-
-            ListNode<T> sortedCurrent = sorted;
-            while (sortedCurrent.next != null && sortedCurrent.next.data.compareTo(current.data) < 0) {
-                sortedCurrent = sortedCurrent.next;
-            }
-            current.next = sortedCurrent.next;
-            if (sortedCurrent.next != null) {
-                sortedCurrent.next.prev = current;
-            }
-            sortedCurrent.next = current;
-            current.prev = sortedCurrent;
-
-
-            if (sortedCurrent == tail || tail == null) {
-                tail = current;
-            }
-        }
-
-        head = sorted.next;
-        if (head != null) {
-            head.prev = null;
+        Object[] dataArray = toArray();
+        Arrays.sort(dataArray);
+        clear();
+        for (Object item : dataArray) {
+            add((T) item);
         }
     }
 
@@ -262,8 +181,6 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
     public int indexOf(Object object) {
         int index = 0;
         ListNode<T> current = head;
-
-
         if (object == null) {
             while (current != null) {
                 if (current.data == null) {
@@ -284,13 +201,10 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
         return -1;
     }
 
-
     @Override
     public int lastIndexOf(Object object) {
         int index = size - 1;
         ListNode<T> current = tail;
-
-        // If the object is null, look for a null element from the end of the list.
         if (object == null) {
             while (current != null) {
                 if (current.data == null) {
@@ -300,7 +214,6 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
                 index--;
             }
         } else {
-            // If the object is not null, look for an element equal to the object from the end.
             while (current != null) {
                 if (object.equals(current.data)) {
                     return index;
@@ -309,95 +222,74 @@ public class MyLinkedList<T extends Comparable<T>> implements MyList<T> {
                 index--;
             }
         }
-        return -1; // Return -1 if the object is not found.
+        return -1;
     }
-
 
     @Override
     public boolean exists(Object object) {
         ListNode<T> current = head;
-
-        // If the object is null, look for a null element in the list.
         if (object == null) {
             while (current != null) {
                 if (current.data == null) {
-                    return true; // Found a null element in the list.
+                    return true;
                 }
                 current = current.next;
             }
         } else {
-            // If the object is not null, look for an element equal to the object.
             while (current != null) {
                 if (object.equals(current.data)) {
-                    return true; // Found an element equal to the object.
+                    return true;
                 }
                 current = current.next;
             }
         }
-        return false; // Object not found in the list.
+        return false;
     }
-
 
     @Override
     public Object[] toArray() {
-        Object[] result = new Object[size]; // Initialize an array of Object with the size of the linked list.
-        int i = 0; // Start with the first index.
-        ListNode<T> current = head; // Start traversal from the head of the list.
-
-        // Traverse the list and fill the array.
+        Object[] result = new Object[size];
+        int i = 0;
+        ListNode<T> current = head;
         while (current != null) {
-            result[i++] = current.data; // Assign the data from the current node to the array.
-            current = current.next; // Move to the next node.
+            result[i++] = current.data;
+            current = current.next;
         }
-
-        return result; // Return the filled array.
+        return result;
     }
-
 
     @Override
     public void clear() {
-        // Iterate through the list and remove all references
         ListNode<T> current = head;
         while (current != null) {
             ListNode<T> next = current.next;
-            current.data = null; // Help garbage collection by clearing the data reference
-            current.next = null; // Clear reference to the next node
-            current.prev = null; // Clear reference to the previous node
-            current = next;      // Move to the next node
+            current.data = null;
+            current.next = null;
+            current.prev = null;
+            current = next;
         }
-
-        // Finally, reset head and tail to null to fully clear the list
         head = null;
         tail = null;
-        size = 0; // Reset the size of the list
+        size = 0;
     }
-
 
     @Override
     public int size() {
-        return size; // Return the size of the list which is updated on every add/remove operation.
+        return size;
     }
 
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
-            private ListNode<T> current = head;  // Start with the first element in the list.
+            private ListNode<T> current = head;
 
             @Override
             public boolean hasNext() {
-                return current != null;  // Return true if there is another element next.
+                return current != null;
             }
 
             @Override
             public T next() {
                 if (!hasNext()) {
-                    throw new NoSuchElementException();  // Throw an exception if there is no next element.
-                }
-                T data = current.data;  // Retrieve the data from the current node.
-                current = current.next;  // Move to the next node.
-                return data;  // Return the data.
-            }
-        };
-    }
+                    throw new NoSuchElementException();
 
-}
