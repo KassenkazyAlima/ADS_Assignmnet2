@@ -6,12 +6,16 @@ This file provides an overview of my project, including instructions such as bui
 The project consists of the following main components:
 
 MyArrayList: An implementation of ArrayList data structure.
+
 MyLinkedList: An implementation of LinkedList data structure.
+
 MySatck: An implementation of Stack data structure using MyLinkedList.
+
 MyQueue: An implementation of Queue data structure using MyLinkedList.
+
 MyMinHeap: An implementation of MinHeap data structure using MyArrayList.
 
-Each data structure class (`MyArrayList`, `MyLinkedList`, `MyStack`, `MyQueue`, `MyMinHeap`) contains various methods for adding, removing, and manipulating elements. Refer to the Javadoc comments in the source code for detailed information on each method.
+Each data structure class (MyArrayList, MyLinkedList, MyStack, MyQueue, MyMinHeap) contains various methods for adding, removing, and manipulating elements. Refer to the Javadoc comments in the source code for detailed information on each method.
 
 
 MyArrayList (fields : array, size). Methods include 
